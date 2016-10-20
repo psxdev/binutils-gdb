@@ -253,6 +253,7 @@ case $basic_machine in
 	| mipsisa64sb1 | mipsisa64sb1el \
 	| mipsisa64sr71k | mipsisa64sr71kel \
 	| mipstx39 | mipstx39el \
+	| mips64r5900 | mips64r5900el \
 	| mn10200 | mn10300 \
 	| msp430 \
 	| ns16k | ns32k \
@@ -265,6 +266,7 @@ case $basic_machine in
 	| sparc | sparc64 | sparc86x | sparclet | sparclite | sparcv9 | sparcv9b \
 	| strongarm \
 	| tahoe | thumb | tic4x | tic80 | tron \
+	| dvp \
 	| v850 | v850e \
 	| we32k \
 	| x86 | xscale | xstormy16 | xtensa \
@@ -326,6 +328,7 @@ case $basic_machine in
 	| mipsisa64sb1-* | mipsisa64sb1el-* \
 	| mipsisa64sr71k-* | mipsisa64sr71kel-* \
 	| mipstx39-* | mipstx39el-* \
+	| mips64r5900-* | mips64r5900el-* \
 	| msp430-* \
 	| none-* | np1-* | nv1-* | ns16k-* | ns32k-* \
 	| orion-* \
@@ -648,6 +651,24 @@ case $basic_machine in
 	*mint | -mint[0-9]* | *MiNT | *MiNT[0-9]*)
 		basic_machine=m68k-atari
 		os=-mint
+		;;
+	mipsEE* | ee | ps2)
+		basic_machine=mips64r5900el-scei
+		case $os in
+		    -linux*)
+			;;
+		    *)
+			os=-elf
+			;;
+		esac
+		;;
+	iop)
+		basic_machine=mipsel-scei
+		os=-irx
+		;;
+	dvp)
+		basic_machine=dvp-scei
+		os=-elf
 		;;
 	mips3*-*)
 		basic_machine=`echo $basic_machine | sed -e 's/mips3/mips64/'`
@@ -1163,7 +1184,7 @@ case $os in
 	      | -storm-chaos* | -tops10* | -tenex* | -tops20* | -its* \
 	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
 	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
-	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly*)
+	      | -powermax* | -dnix* | -irx* | -nx6 | -nx7 | -sei* | -dragonfly*)
 	# Remember, each alternative MUST END IN *, to match a version number.
 		;;
 	-qnx*)

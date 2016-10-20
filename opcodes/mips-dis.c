@@ -345,6 +345,8 @@ const struct mips_arch_choice mips_arch_choices[] = {
     mips_cp0_names_numeric, NULL, 0, mips_hwr_names_numeric },
   { "vr5500",	1, bfd_mach_mips5500, CPU_VR5500, ISA_MIPS4,
     mips_cp0_names_numeric, NULL, 0, mips_hwr_names_numeric },
+  { "r5900",    1, bfd_mach_mips5900, CPU_R5900,  ISA_MIPS3,
+    mips_cp0_names_numeric, NULL, 0, mips_hwr_names_numeric },
   { "r6000",	1, bfd_mach_mips6000, CPU_R6000, ISA_MIPS2,
     mips_cp0_names_numeric, NULL, 0, mips_hwr_names_numeric },
   { "rm7000",	1, bfd_mach_mips7000, CPU_RM7000, ISA_MIPS4,
@@ -695,10 +697,12 @@ print_insn_args (d, l, pc, info)
 	case ')':
 	case '[':
 	case ']':
+	case '+':
+	case '-':
 	  (*info->fprintf_func) (info->stream, "%c", *d);
 	  break;
 
-	case '+':
+	case '*':
 	  /* Extension character; switch for second char.  */
 	  d++;
 	  switch (*d)
@@ -896,6 +900,140 @@ print_insn_args (d, l, pc, info)
 				 mips_fpr_names[(l >> OP_SH_FS) & OP_MASK_FS]);
 	  break;
 
+	case '0':
+          (*info->fprintf_func) (info->stream, "%d",
+                                 /* get bits 6-10 and sign extend */
+                                 (((l >> 6) & 0x1f) ^ 0x10) - 0x10);
+        break;
+
+	case '#':
+	  /* suffix character, suffix is the next character in the argument string */
+	  d++;
+
+	  if(*d == '\0')
+	    {
+	      /* xgettext:c-format */
+	      (*info->fprintf_func) (info->stream,
+				     _("# internal error, incomplete argument suffix (+)"));
+	      return;
+	    }
+	  
+	  /* print suffix from argument string */
+	  (*info->fprintf_func) (info->stream, "%c", *d);
+	  break;
+
+	case '9':
+	  (*info->fprintf_func) (info->stream, "vi27");
+          break;
+
+	case '1':
+	  (*info->fprintf_func) (info->stream, "vf%02d",
+                                 (l >> OP_SH_FT) & OP_MASK_FT);
+	  break;
+	case '2':
+	  (*info->fprintf_func) (info->stream, "vf%02d",
+                                 (l >> OP_SH_FS) & OP_MASK_FS);
+	  break;
+	case '3':
+	  (*info->fprintf_func) (info->stream, "vf%02d",
+                                 (l >> OP_SH_FD) & OP_MASK_FD);
+	  break;
+      
+        case '4':
+          (*info->fprintf_func) (info->stream, "vi%02d",
+                                 (l >> OP_SH_FT) & OP_MASK_FT);
+          break;
+        case '5':
+          (*info->fprintf_func) (info->stream, "vi%02d",
+                                 (l >> OP_SH_FS) & OP_MASK_FS);
+          break;
+        case '6':
+          (*info->fprintf_func) (info->stream, "vi%02d",
+                                 (l >> OP_SH_FD) & OP_MASK_FD);
+          break;
+        case '7':
+          (*info->fprintf_func) (info->stream, "vf%02d",
+                                 (l >> OP_SH_FT) & OP_MASK_FT);
+          switch ((l >> 23) & 0x3)
+            {
+              case 0:
+                (*info->fprintf_func) (info->stream, "x");
+                break;
+              case 1:
+                (*info->fprintf_func) (info->stream, "y");
+                break;
+              case 2:
+                (*info->fprintf_func) (info->stream, "z");
+                break;
+              case 3:
+                (*info->fprintf_func) (info->stream, "w");
+                break;
+            }
+          break;
+        case '=':
+          break;
+        case ';':
+          (*info->fprintf_func) (info->stream, ".xyz\t");
+          break;
+    
+        case '&':
+	  /* don't print extension if it's .xyzw */
+	  if ( ((l >> 21) & 0xf) != 0xf)
+	    {
+	      (*info->fprintf_func) (info->stream, ".");
+	      if (l & (1 << 24))
+		(*info->fprintf_func) (info->stream, "x");
+	      if (l & (1 << 23))
+		(*info->fprintf_func) (info->stream, "y");
+	      if (l & (1 << 22))
+		(*info->fprintf_func) (info->stream, "z");
+	      if (l & (1 << 21))
+		(*info->fprintf_func) (info->stream, "w");
+	    }
+	  (*info->fprintf_func) (info->stream, "\t");
+          break;
+    
+        case '8':
+          (*info->fprintf_func) (info->stream, "vf%02d",
+                                 (l >> OP_SH_FS) & OP_MASK_FS);
+          switch ((l >> 21) & 0x3)
+            {
+              case 0:
+                (*info->fprintf_func) (info->stream, "x");
+                break;
+              case 1:
+                (*info->fprintf_func) (info->stream, "y");
+                break;
+              case 2:
+                (*info->fprintf_func) (info->stream, "z");
+                break;
+              case 3:
+                (*info->fprintf_func) (info->stream, "w");
+                break;
+            }
+          break;
+        case '!':
+          (*info->fprintf_func) (info->stream, "I");
+          break;
+    
+        case '^':
+          (*info->fprintf_func) (info->stream, "^");
+          break;
+    
+        case '_':
+          (*info->fprintf_func) (info->stream, "R");
+          break;
+    
+        case '@':
+          (*info->fprintf_func) (info->stream, "ACC");
+          break;
+    
+        case 'g':
+          delta = (l >> 6) & 0x7fff;
+          delta <<= 3;
+          (*info->print_address_func) (delta, info);
+          break;
+    
 	case 'T':
 	case 'W':
 	  (*info->fprintf_func) (info->stream, "%s",
@@ -1133,8 +1271,12 @@ print_insn_mips (memaddr, word, info)
 
 	      d = op->args;
 	      if (d != NULL && *d != '\0')
-		{
+               { /* If this is an opcode completer, then do not emit
+		      a tab after the opcode. */
+		  if (*d != '&' && *d != ';')
 		  (*info->fprintf_func) (info->stream, "\t");
+
+                 /* Parse and print arguments. */
 		  print_insn_args (d, word, memaddr, info);
 		}
 
@@ -1163,6 +1305,19 @@ _print_insn_mips (memaddr, info, endianness)
 {
   bfd_byte buffer[INSNLEN];
   int status;
+
+#ifdef ARCH_dvp  
+  {
+    /* bfd_mach_dvp_p is a macro which may evaluate its arguments more than  
+       once.  Since dvp_mach_type is a function, ensure it's only called  
+       once.  */
+    int mach = dvp_info_mach_type (info);
+
+    if (bfd_mach_dvp_p (info->mach)
+        || bfd_mach_dvp_p (mach))
+      return print_insn_dvp (memaddr, info);
+  }
+#endif  
 
   set_default_mips_dis_options (info);
   parse_mips_dis_options (info->disassembler_options);
