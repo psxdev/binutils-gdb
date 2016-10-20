@@ -404,8 +404,15 @@ mips*vr4100el-*-elf*)	targ_emul=elf32l4300 ;;
 mips*vr4100-*-elf*)	targ_emul=elf32b4300 ;;
 mips*vr5000el-*-elf*)	targ_emul=elf32l4300 ;;
 mips*vr5000-*-elf*)	targ_emul=elf32b4300 ;;
+mips*r5900*-*-elf*)	targ_emul=elf32l5900
+			targ_extra_emuls=mipsirx
+			;;
+dvp-*-*)                targ_emul=elf32l5900 ;;
 mips*el-*-elf*)		targ_emul=elf32elmip ;;
 mips*-*-elf*)		targ_emul=elf32ebmip ;;
+mips*el-*-irx*)		targ_emul=mipsirx
+			targ_extra_emuls=elf32elmip
+			;;
 mips*el-*-rtems*)	targ_emul=elf32elmip ;;
 mips*-*-rtems*)		targ_emul=elf32ebmip ;;
 mips*el-*-vxworks*)	targ_emul=elf32elmip ;;

@@ -2298,6 +2298,7 @@ for this_target in $target $canon_targets ; do
       m5200)		cpu_type=m68k ;;
       m8*)		cpu_type=m88k ;;
       mips*el)		cpu_type=mips endian=little ;;
+      mips*5900*)	cpu_type=mips endian=little ;;
       mips*)		cpu_type=mips endian=big ;;
       or32*)		cpu_type=or32 endian=big ;;
       pjl*)		cpu_type=pj endian=little ;;
@@ -2382,6 +2383,8 @@ for this_target in $target $canon_targets ; do
 
       fr30-*-*)				fmt=elf ;;
       frv-*-*)				fmt=elf ;;
+
+      dvp-*-*)				fmt=elf bfd_gas=yes install_tooldir= ;;
 
       hppa-*-linux*)	case ${cpu} in
 			    hppa*64*)	fmt=elf em=hppalinux64;;
@@ -2537,6 +2540,7 @@ EOF
       mips-*-irix6*)			fmt=elf em=irix ;;
       mips-*-irix5*)			fmt=elf em=irix ;;
       mips-*-irix*)			fmt=ecoff em=irix ;;
+      mips-*-irx*)			fmt=elf endian=little ;;
       mips-*-lnews*)			fmt=ecoff em=lnews ;;
       mips-*-riscos*)			fmt=ecoff ;;
       mips*-*-linux*)			fmt=elf em=tmips ;;
@@ -2546,6 +2550,7 @@ EOF
       mips-*-netbsd*)			fmt=elf ;;
       mips-*-openbsd*)			fmt=elf ;;
       mips-*-vxworks*)			fmt=elf ;;
+      mips*-*-irx*)			fmt=elf endian=little em=mipsirx ;;
 
       mmix-*-*)				fmt=elf ;;
       mn10200-*-*)			fmt=elf ;;
