@@ -138,6 +138,7 @@ DESCRIPTION
 .#define bfd_mach_mips5000		5000
 .#define bfd_mach_mips5400		5400
 .#define bfd_mach_mips5500		5500
+.#define bfd_mach_mips5900		5900
 .#define bfd_mach_mips6000		6000
 .#define bfd_mach_mips7000		7000
 .#define bfd_mach_mips8000		8000
@@ -150,6 +151,11 @@ DESCRIPTION
 .#define bfd_mach_mipsisa32r2           33
 .#define bfd_mach_mipsisa64             64
 .#define bfd_mach_mipsisa64r2           65
+.#define bfd_mach_dvp_dma		42000
+.#define bfd_mach_dvp_vif		42001
+.#define bfd_mach_dvp_vu		42002
+.#define bfd_mach_dvp_gif		42003
+.#define bfd_mach_dvp_p(mach) ((mach) >= 42000 && (mach) <= 42003)
 .  bfd_arch_i386,      {* Intel 386 *}
 .#define bfd_mach_i386_i386 1
 .#define bfd_mach_i386_i8086 2

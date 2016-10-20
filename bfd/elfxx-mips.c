@@ -4100,6 +4100,9 @@ _bfd_elf_mips_mach (flagword flags)
     case E_MIPS_MACH_5500:
       return bfd_mach_mips5500;
 
+    case E_MIPS_MACH_5900:
+      return bfd_mach_mips5900;
+
     case E_MIPS_MACH_SB1:
       return bfd_mach_mips_sb1;
 
@@ -4432,6 +4435,10 @@ _bfd_mips_elf_section_from_shdr (bfd *abfd, Elf_Internal_Shdr *hdr,
      probably get away with this.  */
   switch (hdr->sh_type)
     {
+    case SHT_MIPS_IOPMOD:
+      if (strcmp (name, ".iopmod") != 0)
+	return FALSE;
+      break;
     case SHT_MIPS_LIBLIST:
       if (strcmp (name, ".liblist") != 0)
 	return FALSE;
@@ -4488,6 +4495,15 @@ _bfd_mips_elf_section_from_shdr (bfd *abfd, Elf_Internal_Shdr *hdr,
 	  && strncmp (name, ".MIPS.post_rel",
 		      sizeof ".MIPS.post_rel" - 1) != 0)
 	return FALSE;
+      break;
+    case SHT_DVP_OVERLAY_TABLE:
+      if (strcmp (name, SHNAME_DVP_OVERLAY_TABLE) !=0)
+        return FALSE;
+      break;
+    case SHT_DVP_OVERLAY:
+      if (strncmp (name, SHNAME_DVP_OVERLAY_PREFIX,
+                   sizeof (SHNAME_DVP_OVERLAY_PREFIX) - 1) !=0)
+        return FALSE;
       break;
     default:
       return FALSE;
@@ -4589,7 +4605,25 @@ _bfd_mips_elf_fake_sections (bfd *abfd, Elf_Internal_Shdr *hdr, asection *sec)
 
   name = bfd_get_section_name (abfd, sec);
 
-  if (strcmp (name, ".liblist") == 0)
+  if (strcmp (name, ".iopmod") == 0)
+    {
+      /* Verify that this bfd is going to be an IRX, and not an object 
+         file or a rogue elf with an .iopmod section by looking for 
+         the PT_MIPS_IRXHDR program header.  */
+      struct elf_segment_map *m;
+
+      for (m = elf_tdata (abfd)->segment_map; m != NULL; m = m->next)
+        if (m->p_type == PT_MIPS_IRXHDR)
+          {
+            /* Mark the file as an IRX.  */
+            elf_elfheader (abfd)->e_type = ET_IRX;
+            /* Setup the section type and flags.  */
+            hdr->sh_type = SHT_MIPS_IOPMOD;
+            hdr->sh_addr = 0;
+            hdr->sh_flags &= ~(SHF_ALLOC | SHF_WRITE | SHF_EXECINSTR);
+          }
+    }
+  else if (strcmp (name, ".liblist") == 0)
     {
       hdr->sh_type = SHT_MIPS_LIBLIST;
       hdr->sh_info = sec->_raw_size / sizeof (Elf32_Lib);
@@ -4688,6 +4722,17 @@ _bfd_mips_elf_fake_sections (bfd *abfd, Elf_Internal_Shdr *hdr, asection *sec)
       hdr->sh_flags |= SHF_ALLOC;
       hdr->sh_entsize = 8;
     }
+  else if (strcmp (name, SHNAME_DVP_OVERLAY_TABLE) == 0)
+    {
+      hdr->sh_type = SHT_DVP_OVERLAY_TABLE;
+      hdr->sh_entsize = sizeof (Elf32_Dvp_External_Overlay);
+      /* The sh_link field is set in final_write_processing.  */
+    }
+  else if (strcmp (name, SHNAME_DVP_OVERLAY_STRTAB) == 0)
+    hdr->sh_type = SHT_STRTAB;
+  else if (strncmp (name, SHNAME_DVP_OVERLAY_PREFIX,
+                    sizeof (SHNAME_DVP_OVERLAY_PREFIX) - 1) == 0)
+    hdr->sh_type = SHT_DVP_OVERLAY;
 
   /* The generic elf_fake_sections will set up REL_HDR using the default
    kind of relocations.  We used to set up a second header for the
@@ -7154,6 +7199,10 @@ mips_set_isa_flags (bfd *abfd)
       val = E_MIPS_ARCH_4 | E_MIPS_MACH_5500;
       break;
 
+    case bfd_mach_mips5900:
+      val = E_MIPS_ARCH_3 | E_MIPS_MACH_5900;
+      break;
+
     case bfd_mach_mips5000:
     case bfd_mach_mips7000:
     case bfd_mach_mips8000:
@@ -7276,6 +7325,13 @@ _bfd_mips_elf_final_write_processing (bfd *abfd,
 	  (*hdrpp)->sh_link = elf_section_data (sec)->this_idx;
 	  break;
 
+        case SHT_DVP_OVERLAY_TABLE:
+          /* ??? This may not be technically necessary, just going with  
+             the flow ...  */
+          sec = bfd_get_section_by_name (abfd, SHNAME_DVP_OVERLAY_STRTAB);
+          if (sec != NULL)
+            (*hdrpp)->sh_link = elf_section_data (sec)->this_idx;
+          break;
 	}
     }
 }
@@ -8904,6 +8960,7 @@ static const struct mips_mach_extension mips_mach_extensions[] = {
   { bfd_mach_mips4300, bfd_mach_mips4000 },
   { bfd_mach_mips4100, bfd_mach_mips4000 },
   { bfd_mach_mips4010, bfd_mach_mips4000 },
+  { bfd_mach_mips5900, bfd_mach_mips4000 },
 
   /* MIPS32 extensions.  */
   { bfd_mach_mipsisa32r2, bfd_mach_mipsisa32 },
@@ -9066,7 +9123,7 @@ _bfd_mips_elf_merge_private_bfd_data (bfd *ibfd, bfd *obfd)
     {
       (*_bfd_error_handler)
 	(_("%s: linking 32-bit code with 64-bit code"),
-	 bfd_archive_filename (ibfd));
+	 bfd_archive_filename (ibfd), old_flags, new_flags);
       ok = FALSE;
     }
   else if (!mips_mach_extends_p (bfd_get_mach (ibfd), bfd_get_mach (obfd)))

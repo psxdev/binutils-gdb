@@ -73,6 +73,7 @@ enum
   I_mips5000,
   I_mips5400,
   I_mips5500,
+  I_mips5900,
   I_mips6000,
   I_mips7000,
   I_mips8000,
@@ -84,6 +85,10 @@ enum
   I_mipsisa32r2,
   I_mipsisa64,
   I_mipsisa64r2,
+  I_dvp_dma,
+  I_dvp_vif,
+  I_dvp_vu,
+  I_dvp_gif,
   I_sb1,
 };
 
@@ -105,6 +110,7 @@ static const bfd_arch_info_type arch_info_struct[] =
   N (64, 64, bfd_mach_mips5000, "mips:5000",      FALSE, NN(I_mips5000)),
   N (64, 64, bfd_mach_mips5400, "mips:5400",      FALSE, NN(I_mips5400)),
   N (64, 64, bfd_mach_mips5500, "mips:5500",      FALSE, NN(I_mips5500)),
+  N (64, 32, bfd_mach_mips5900, "mips:5900",      FALSE, NN(I_mips5900)),
   N (32, 32, bfd_mach_mips6000, "mips:6000",      FALSE, NN(I_mips6000)),
   N (64, 64, bfd_mach_mips7000, "mips:7000",      FALSE, NN(I_mips7000)),
   N (64, 64, bfd_mach_mips8000, "mips:8000",      FALSE, NN(I_mips8000)),
@@ -116,6 +122,10 @@ static const bfd_arch_info_type arch_info_struct[] =
   N (32, 32, bfd_mach_mipsisa32r2,"mips:isa32r2", FALSE, NN(I_mipsisa32r2)),
   N (64, 64, bfd_mach_mipsisa64,  "mips:isa64",   FALSE, NN(I_mipsisa64)),
   N (64, 64, bfd_mach_mipsisa64r2,"mips:isa64r2", FALSE, NN(I_mipsisa64r2)),
+  N (32, 32, bfd_mach_dvp_dma, "dvp:dma",         FALSE, NN(I_dvp_dma)),
+  N (32, 32, bfd_mach_dvp_vif, "dvp:vif",         FALSE, NN(I_dvp_vif)),
+  N (32, 32, bfd_mach_dvp_vu, "dvp:vu",           FALSE, NN(I_dvp_vu)),
+  N (32, 32, bfd_mach_dvp_gif, "dvp:gif",         FALSE, NN(I_dvp_gif)),
   N (64, 64, bfd_mach_mips_sb1, "mips:sb1",       FALSE, 0),
 };
 
