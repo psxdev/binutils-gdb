@@ -2005,7 +2005,7 @@ md_apply_fix3 (fixP, valueP, seg)
 		}
 	    }
 	  fixP->fx_done = 1;
-	  return 1;
+	  return;
 	}
 
       /* For the gif nloop operand, if it was specified by the user ensure
@@ -2025,7 +2025,7 @@ md_apply_fix3 (fixP, valueP, seg)
 			   fixP->fx_file, fixP->fx_line);
 	      /* Don't override the user specified value.  */
 	      fixP->fx_done = 1;
-	      return 1;
+	      return;
 	    }
 	}
 
@@ -2052,7 +2052,7 @@ md_apply_fix3 (fixP, valueP, seg)
       if (fixP->fx_done)
 	{
 	  /* Nothing else to do here.  */
-	  return 1;
+	  return;
 	}
 
       /* Determine a BFD reloc value based on the operand information.
@@ -2083,7 +2083,7 @@ md_apply_fix3 (fixP, valueP, seg)
 	      as_bad_where (fixP->fx_file, fixP->fx_line,
 			    "can't handle mpg loaded vu code with branch relocations");
 	      fixP->fx_done = 1;
-	      return 1;
+	      return;
 	    }
 	  else
 	    {
@@ -2122,7 +2122,7 @@ md_apply_fix3 (fixP, valueP, seg)
 	  as_bad_where (fixP->fx_file, fixP->fx_line,
 			"unresolved expression that must be resolved");
 	  fixP->fx_done = 1;
-	  return 1;
+	  return;
 	}
     }
   else if (fixP->fx_done)
@@ -2156,7 +2156,7 @@ md_apply_fix3 (fixP, valueP, seg)
      See the comment describing fx_addnumber in write.h.  */
   fixP->fx_addnumber = value;
 
-  return 1;
+  return;
 }
 
 /* Translate internal representation of relocation info to BFD target
