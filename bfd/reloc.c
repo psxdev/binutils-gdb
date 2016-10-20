@@ -2151,6 +2151,8 @@ ENUMX
   BFD_RELOC_MIPS_TLS_TPREL_HI16
 ENUMX
   BFD_RELOC_MIPS_TLS_TPREL_LO16
+ENUMX
+  BFD_RELOC_MIPS15_S3
 ENUMDOC
   MIPS ELF relocations.
 COMMENT
@@ -2273,6 +2275,27 @@ ENUM
 ENUMDOC
   Adjust by program base.
 COMMENT
+ENUM 
+  BFD_RELOC_MIPS_DVP_11_PCREL 
+ENUMDOC 
+  MIPS DVP Relocations. 
+  This is an 11-bit pc relative reloc.  The recorded address is for the 
+  lower instruction word, and the value is in 128 bit units. 
+ENUM 
+  BFD_RELOC_MIPS_DVP_27_S4 
+ENUMDOC 
+  This is a 27 bit address left shifted by 4. 
+ENUM 
+  BFD_RELOC_MIPS_DVP_11_S4 
+ENUMDOC 
+  This is the 11 bit offset operand of ilw/stw instructions 
+  left shifted by 4. 
+ENUM 
+  BFD_RELOC_MIPS_DVP_U15_S3 
+ENUMDOC 
+  This is the 15 bit unsigned immediate operand of the iaddiu instruction 
+  left shifted by 3. 
+COMMENT 
 
 ENUM
   BFD_RELOC_386_GOT32

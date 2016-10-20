@@ -97,6 +97,13 @@ START_RELOC_NUMBERS (elf_mips_reloc_type)
   RELOC_NUMBER (R_MIPS16_HI16, 104)
   RELOC_NUMBER (R_MIPS16_LO16, 105)
   FAKE_RELOC (R_MIPS16_max, 106)
+  /* This is used by a mips co-processor instruction.  */
+  RELOC_NUMBER (R_MIPS15_S3, 119)
+  /* These relocs are for the dvp.  */
+  RELOC_NUMBER (R_MIPS_DVP_11_PCREL, 120)
+  RELOC_NUMBER (R_MIPS_DVP_27_S4, 121)
+  RELOC_NUMBER (R_MIPS_DVP_11_S4, 122)
+  RELOC_NUMBER (R_MIPS_DVP_U15_S3, 123)
   /* This was a GNU extension used by embedded-PIC.  It was co-opted by
      mips-linux for exception-handling data.  It is no longer used, but
      should continue to be supported by the linker for backward
@@ -211,6 +218,7 @@ END_RELOC_NUMBERS (R_MIPS_maxext)
 #define E_MIPS_MACH_SB1         0x008a0000
 #define E_MIPS_MACH_5400	0x00910000
 #define E_MIPS_MACH_5500	0x00980000
+#define E_MIPS_MACH_5900        0x00920000
 #define E_MIPS_MACH_9000	0x00990000
 
 /* Processor specific section indices.  These sections do not actually
@@ -359,6 +367,17 @@ END_RELOC_NUMBERS (R_MIPS_maxext)
 /* Runtime procedure descriptor table exception information (ucode) ??? */
 #define SHT_MIPS_PDR_EXCEPTION	0x70000029
 
+/* .iopmod section for IRXs */
+#define SHT_MIPS_IOPMOD		0x70000080
+
+/* The VU overlay table.  */
+#define SHT_DVP_OVERLAY_TABLE           0x7ffff420
+#define SHNAME_DVP_OVERLAY_TABLE        ".DVP.ovlytab"
+#define SHNAME_DVP_OVERLAY_STRTAB       ".DVP.ovlystrtab"
+/* A VU overlay.  */
+#define SHT_DVP_OVERLAY                 0x7ffff421
+/* Prefix of VU overlay sections.  */
+#define SHNAME_DVP_OVERLAY_PREFIX       ".DVP.overlay."
 
 /* A section of type SHT_MIPS_LIBLIST contains an array of the
    following structure.  The sh_link field is the section index of the
@@ -524,6 +543,10 @@ extern void bfd_mips_elf32_swap_reginfo_out
 
 /* .MIPS.options section.  */
 #define PT_MIPS_OPTIONS		0x70000002
+
+/* IRX header */
+/* #define PT_MIPS_IRXHDR		0x70000080 let's define it in common.h...*/
+
 
 /* Processor specific dynamic array tags.  */
 
@@ -715,6 +738,16 @@ extern void bfd_mips_elf32_swap_reginfo_out
 #define STO_INTERNAL		STV_INTERNAL
 #define STO_HIDDEN		STV_HIDDEN
 #define STO_PROTECTED		STV_PROTECTED
+
+/* These values are used for the dvp.  */
+#define STO_DVP_DMA             0xe8  
+#define STO_DVP_VIF             0xe9  
+#define STO_DVP_GIF             0xea  
+#define STO_DVP_VU              0xeb  
+/* Reserve a couple in case we need them.  */
+#define STO_DVP_RES1            0xec  
+#define STO_DVP_RES2            0xed  
+#define STO_DVP_P(sto) ((sto) >= STO_DVP_DMA && (sto) <= STO_DVP_RES2)  
 
 /* This value is used for a mips16 .text symbol.  */
 #define STO_MIPS16		0xf0
@@ -955,6 +988,31 @@ extern void bfd_mips_elf64_swap_reginfo_in
   (bfd *, const Elf64_External_RegInfo *, Elf64_Internal_RegInfo *);
 extern void bfd_mips_elf64_swap_reginfo_out
   (bfd *, const Elf64_Internal_RegInfo *, Elf64_External_RegInfo *);
+
+/* The vu overlay table is an array of this.  */
+
+typedef struct
+{
+  /* `name' is offset into overlay string table section.  */
+  char name[4];
+  char lma[4];
+  char vma[4];
+} Elf32_Dvp_External_Overlay;
+
+typedef struct
+{
+  bfd_vma name;
+  bfd_vma lma;
+  bfd_vma vma;
+} Elf32_Dvp_Internal_Overlay;
+
+/* overlay swapping routines. */
+extern void bfd_dvp_elf32_swap_overlay_in
+  PARAMS ((bfd *, const Elf32_Dvp_External_Overlay *,
+           Elf32_Dvp_Internal_Overlay *));
+extern void bfd_dvp_elf32_swap_overlay_out
+  PARAMS ((bfd *, const Elf32_Dvp_Internal_Overlay *,
+           Elf32_Dvp_External_Overlay *));
 
 /* Masks for the info work of an ODK_EXCEPTIONS descriptor.  */
 #define OEX_FPU_MIN	0x1f	/* FPEs which must be enabled.  */

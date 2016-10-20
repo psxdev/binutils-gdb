@@ -52,6 +52,7 @@ case ${cpu} in
   m8*)			cpu_type=m88k ;;
   maxq)			cpu_type=maxq ;;
   mips*el)		cpu_type=mips endian=little ;;
+  mips*5900*)	cpu_type=mips endian=little ;;
   mips*)		cpu_type=mips endian=big ;;
   or32*)		cpu_type=or32 endian=big ;;
   pjl*)			cpu_type=pj endian=little ;;
@@ -141,6 +142,8 @@ case ${generic_target} in
   fr30-*-*)				fmt=elf ;;
   frv-*-*linux*)			fmt=elf em=linux;;
   frv-*-*)				fmt=elf ;;
+
+  dvp-*-*)				fmt=elf bfd_gas=yes install_tooldir= ;;
 
   hppa-*-linux*)
     case ${cpu} in
@@ -292,6 +295,7 @@ case ${generic_target} in
   mips-*-irix6*)			fmt=elf em=irix ;;
   mips-*-irix5*)			fmt=elf em=irix ;;
   mips-*-irix*)				fmt=ecoff em=irix ;;
+  mips-*-irx*)			fmt=elf endian=little ;;
   mips-*-lnews*)			fmt=ecoff em=lnews ;;
   mips-*-riscos*)			fmt=ecoff ;;
   mips*-*-linux*)			fmt=elf em=tmips ;;
@@ -300,6 +304,7 @@ case ${generic_target} in
   mips-*-elf* | mips-*-rtems*)		fmt=elf ;;
   mips-*-netbsd*)			fmt=elf ;;
   mips-*-openbsd*)			fmt=elf ;;
+  mips*-*-irx*)			fmt=elf endian=little em=mipsirx ;;
 
   mmix-*-*)				fmt=elf ;;
 

@@ -152,6 +152,7 @@ ALL_EMULATIONS = \
 	eelf32_i860.o \
 	eelf32_sparc.o \
 	eelf32b4300.o \
+	eelf32l5900.o \
 	eelf32cr16c.o \
 	eelf32bmip.o \
 	eelf32bmipn32.o \
@@ -259,6 +260,7 @@ ALL_EMULATIONS = \
 	emipsbsd.o \
 	emipsidt.o \
 	emipsidtl.o \
+	emipsirx.o \
 	emipslit.o \
 	emipslnews.o \
 	emipspe.o \
@@ -711,6 +713,9 @@ eelf32l4300.c: $(srcdir)/emulparams/elf32l4300.sh \
   $(srcdir)/emulparams/elf32b4300.sh $(srcdir)/emulparams/elf32bmip.sh \
   $(srcdir)/emultempl/elf32.em $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
 	${GENSCRIPTS} elf32l4300 "$(tdir_elf32l4300)"
+eelf32l5900.c: $(srcdir)/emulparams/elf32l5900.sh
+  $(srcdir)/emultempl/elf32.em $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+	${GENSCRIPTS} elf32l5900 "$(tdir_elf32l5900)"
 eelf32lmip.c: $(srcdir)/emulparams/elf32lmip.sh \
   $(srcdir)/emulparams/elf32bmip.sh \
   $(srcdir)/emultempl/elf32.em $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
@@ -1080,6 +1085,9 @@ emipsidt.c: $(srcdir)/emulparams/mipsidt.sh \
 emipsidtl.c: $(srcdir)/emulparams/mipsidtl.sh \
   $(srcdir)/emultempl/mipsecoff.em $(srcdir)/scripttempl/mips.sc ${GEN_DEPENDS}
 	${GENSCRIPTS} mipsidtl "$(tdir_mipsidtl)"
+emipsirx.c:  $(srcdir)/emulparams/mipsirx.sh \
+  $(srcdir)/emultempl/irx.em $(srcdir)/scripttempl/irx.sc ${GEN_DEPENDS}
+	${GENSCRIPTS} mipsirx "$(tdir_mipsirx)"
 emipslit.c:  $(srcdir)/emulparams/mipslit.sh \
   $(srcdir)/emultempl/generic.em $(srcdir)/scripttempl/mips.sc ${GEN_DEPENDS}
 	${GENSCRIPTS} mipslit "$(tdir_mipslit)"

@@ -165,6 +165,24 @@ Software Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  *
 #define	OP_OP_SDC2		0x3e
 #define	OP_OP_SDC3		0x3f	/* a.k.a. sd */
 
+/* r5900's VU additional features */
+#define OP_SH_VADDI             6 
+#define OP_MASK_VADDI           0x1f 
+#define OP_SH_VUTREG            16 
+#define OP_MASK_VUTREG          0x1f 
+#define OP_SH_VUSREG            11 
+#define OP_MASK_VUSREG          0x1f 
+#define OP_SH_VUDREG            6 
+#define OP_MASK_VUDREG          0x1f 
+#define OP_SH_VUFSF             21 
+#define OP_MASK_VUFSF           0x3 
+#define OP_SH_VUFTF             23 
+#define OP_MASK_VUFTF           0x3 
+#define OP_SH_VUDEST            21 
+#define OP_MASK_VUDEST          0xf 
+#define OP_SH_VUCALLMS          6 
+#define OP_MASK_VUCALLMS        0x7fff 
+
 /* Values in the 'VSEL' field.  */
 #define MDMX_FMTSEL_IMM_QH	0x1d
 #define MDMX_FMTSEL_IMM_OB	0x1e
@@ -278,6 +296,25 @@ struct mips_opcode
    see also "k" above
    "+D" Combined destination register ("G") and sel ("H") for CP0 ops,
 	for pretty-printing in disassembly only.
+   "0" vu0 immediate for viaddi (OP_*_VADDI) 
+   "1" vu0 fp reg position 1 (OP_*_VUTREG) 
+   "2" vu0 fp reg position 2 (OP_*_VUSREG) 
+   "3" vu0 fp reg position 3 (OP_*_VUDREG) 
+   "4" vu0 int reg position 1 (OP_*_VUTREG) 
+   "5" vu0 int reg position 2 (OP_*_VUSREG) 
+   "6" vu0 int reg position 3 (OP_*_VURREG) 
+   "7" vu0 fp reg with ftf modifier (OP_*_VUTREG and OP_*_VUFTF) 
+   "8" vu0 fp reg with fsf modifier (OP_*_VUSREG and OP_*_VUFSF) 
+   "9" vi27 for vcallmsr 
+   "#" optional suffix that must match if present 
+   "=" dest operant completer, must match previous dest if present 
+   "&" dest instruction completer (OP_*_VUDEST) 
+   ";" dest instruction completer, must by xyz 
+   "!" vu0 I register 
+   "^" vu0 Q register 
+   "_" vu0 R register 
+   "@" vu0 ACC register 
+   "g" Immediate operand for vcallms instruction. (OP_*_VUCALLMS) 
 
    Macro instructions:
    "A" General 32 bit expression
@@ -442,6 +479,8 @@ struct mips_opcode
 #define INSN_5400		  0x01000000
 /* NEC VR5500 instruction.  */
 #define INSN_5500		  0x02000000
+/* Toshiba R5900 (PlayStation2) instruction.  */
+#define INSN_5900                 0x04000000
 
 /* MIPS ISA defines, use instead of hardcoding ISA level.  */
 
@@ -476,6 +515,7 @@ struct mips_opcode
 #define CPU_R5000	5000
 #define CPU_VR5400	5400
 #define CPU_VR5500	5500
+#define CPU_R5900       5900
 #define CPU_R6000	6000
 #define CPU_RM7000	7000
 #define CPU_R8000	8000
@@ -510,6 +550,7 @@ struct mips_opcode
      || (cpu == CPU_VR4120 && ((insn)->membership & INSN_4120) != 0)	\
      || (cpu == CPU_VR5400 && ((insn)->membership & INSN_5400) != 0)	\
      || (cpu == CPU_VR5500 && ((insn)->membership & INSN_5500) != 0)	\
+     || (cpu == CPU_R5900 && ((insn)->membership & INSN_5900) != 0)     \
      || 0)	/* Please keep this term for easier source merging.  */
 
 /* This is a list of macro expanded instructions.
