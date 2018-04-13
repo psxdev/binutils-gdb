@@ -4,7 +4,6 @@ BIG_OUTPUT_FORMAT="elf32-bigmips"
 LITTLE_OUTPUT_FORMAT="elf32-littlemips"
 TEXT_START_ADDR=0x100000
 MAXPAGESIZE=128
-INITIAL_READONLY_SECTIONS='.reginfo : { *(.reginfo) }'
 OTHER_TEXT_SECTIONS='*(.mips16.fn.*) *(.mips16.call.*)'
 OTHER_GOT_SYMBOLS='
   _gp = ALIGN(16) + 0x7ff0;
@@ -20,6 +19,9 @@ EXECUTABLE_SYMBOLS='_DYNAMIC_LINK = 0;'
 OTHER_SECTIONS='
   .gptab.sdata : { *(.gptab.data) *(.gptab.sdata) }
   .gptab.sbss : { *(.gptab.bss) *(.gptab.sbss) }
+  PROVIDE(_heap_size = -1);
+  PROVIDE(_stack = -1);
+  PROVIDE(_stack_size = 128 * 1024);
 '
 ARCH="mips:5900"
 MACHINE=
