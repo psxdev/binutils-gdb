@@ -1720,7 +1720,9 @@ md_estimate_size_before_relax (fragP, segment)
      segT segment;
 {
   /* Our initial estimate is always 0.  */
-  return 0;
+  /* XXX return 0; */
+  /* XXX Reverse engineered from Sony's ee-dvp-as binary: */
+  return RELAX_DONE_P(fragP->fr_subtype) ? RELAX_GROWTH(fragP->fr_subtype) : 0;
 } 
 
 /* Perform the relaxation.
@@ -1754,7 +1756,10 @@ dvp_relax_frag (fragP, stretch)
       return 0;
     }
 
-  target = S_GET_VALUE (symbolP) + symbolP->sy_frag->fr_address;
+  /* XXX target = S_GET_VALUE (symbolP) + symbolP->sy_frag->fr_address; */
+  /* XXX The above segfault as symbolP->sy_frag is only a valid pointer when
+   * symbolP is not local. Sony's ee-dvp-as does not add fr_address. */
+  target = S_GET_VALUE (symbolP);
 
   if (fragP->fr_subtype == RELAX_MPG)
     {
