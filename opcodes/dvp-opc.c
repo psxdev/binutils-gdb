@@ -1220,7 +1220,7 @@ extract_ffstreg (opcode, operand, mods, insn, pinvalid)
   if (operand->shift == VU_SHIFT_SREG)
     return (((*insn & VLFSF (~0)) >> 21) << 5) | (((*insn) & MS) >> VU_SHIFT_SREG);
   else
-    return (((*insn & VLFTF (~0)) >> 21) << 5) | (((*insn) & MS) >> VU_SHIFT_TREG);
+    return (((*insn & VLFTF (~0)) >> 23) << 5) | (((*insn) & MT) >> VU_SHIFT_TREG);
 }
 
 /* F register.  */
