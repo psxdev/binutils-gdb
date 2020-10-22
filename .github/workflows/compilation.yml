@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  repository_dispatch:
+    types: [run_build]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: alpine:latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        apk add build-base bash texinfo bison flex
+
+    - name: Compile project
+      run: |
+        export PS2DEV=$PWD/ps2dev
+        export PS2SDK=$PS2DEV/ps2sdk
+        export PATH=$PATH:$PS2DEV/bin:$PS2DEV/ee/bin:$PS2DEV/iop/bin:$PS2DEV/dvp/bin:$PS2SDK/bin
+        ./build-binutils.sh   ee mips64r5900el-ps2-elf
