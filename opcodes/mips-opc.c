@@ -505,8 +505,10 @@ const struct mips_opcode mips_builtin_opcodes[] =
 {"deret",   "",         0x4200001f, 0xffffffff, 0, 			I32|G2	},
 {"dext",    "t,r,I,+I",	0,    (int) M_DEXT,	INSN_MACRO,		I65	},
 {"dext",    "t,r,+A,+C", 0x7c000003, 0xfc00003f, WR_t|RD_s,    		I65	},
+#if 0
 {"dextm",   "t,r,+A,+G", 0x7c000001, 0xfc00003f, WR_t|RD_s,    		I65	},
 {"dextu",   "t,r,+E,+H", 0x7c000002, 0xfc00003f, WR_t|RD_s,    		I65	},
+#endif
 /* For ddiv, see the comments about div.  */
 {"ddiv",    "z,s,t",    0x0000001e, 0xfc00ffff, RD_s|RD_t|WR_HILO,      I3      },
 {"ddiv",    "d,v,t",	0,    (int) M_DDIV_3,	INSN_MACRO,		I3	},
@@ -520,8 +522,10 @@ const struct mips_opcode mips_builtin_opcodes[] =
 {"di",      "t",	0x41606000, 0xffe0ffff,	WR_t|WR_C0,		I33	},
 {"dins",    "t,r,I,+I",	0,    (int) M_DINS,	INSN_MACRO,		I65	},
 {"dins",    "t,r,+A,+B", 0x7c000007, 0xfc00003f, WR_t|RD_s,    		I65	},
+#if 0
 {"dinsm",   "t,r,+A,+F", 0x7c000005, 0xfc00003f, WR_t|RD_s,    		I65	},
 {"dinsu",   "t,r,+E,+F", 0x7c000006, 0xfc00003f, WR_t|RD_s,    		I65	},
+#endif
 /* The MIPS assembler treats the div opcode with two operands as
    though the first operand appeared twice (the first operand is both
    a source and a destination).  To get the div machine instruction,
