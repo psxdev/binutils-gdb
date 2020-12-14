@@ -165,6 +165,7 @@ extern void s_fail (int);
 extern void s_fill (int);
 extern void s_float_space (int mult);
 extern void s_func (int);
+extern void do_s_func (int end_p, const char *default_prefix);
 extern void s_globl (int arg);
 extern void s_if (int arg);
 extern void s_ifb (int arg);

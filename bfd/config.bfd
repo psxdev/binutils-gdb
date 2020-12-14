@@ -418,6 +418,11 @@ case "${targ}" in
     targ_defvec=d30v_elf32_vec
     ;;
 
+  dvp-*-*)
+    targ_defvec=mips_elf32_le_vec
+    targ_selvecs="mips_elf64_le_vec"
+    ;;
+
   epiphany-*-elf)
     targ_defvec=epiphany_elf32_vec
     ;;
@@ -1002,6 +1007,10 @@ case "${targ}" in
     targ_selvecs="mips_elf32_le_vec mips_ecoff_be_vec mips_ecoff_le_vec"
     ;;
 #endif
+  mips*-*-irx*)
+    targ_defvec=mips_elf32_le_vec
+    targ_selvecs="mips_elf32_be_vec"
+    ;;
   mips*-sgi-* | mips*-*-bsd*)
     targ_defvec=mips_ecoff_be_vec
     targ_selvecs=mips_ecoff_le_vec
