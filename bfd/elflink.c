@@ -7198,9 +7198,19 @@ elf_link_input_bfd (struct elf_final_link_info *finfo, bfd *input_bfd)
 			 elf_link_output_extsym that this symbol is
 			 used by a reloc.  */
 		      BFD_ASSERT (rh->indx < 0);
+		      if (elf_elfheader (output_bfd)->e_type != ET_IRX
+			  || finfo->info->strip != strip_all)
+			{
 		      rh->indx = -2;
 
 		      *rel_hash = rh;
+			}
+		      else
+			{
+			  irela->r_info = ((bfd_vma) 0 << r_sym_shift
+				   | (irela->r_info & r_type_mask));
+			  *rel_hash = NULL;
+			}
 
 		      continue;
 		    }
