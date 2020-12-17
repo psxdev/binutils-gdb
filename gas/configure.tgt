@@ -300,6 +300,8 @@ case ${generic_target} in
   mips-*-elf* | mips-*-rtems*)		fmt=elf ;;
   mips-*-netbsd*)			fmt=elf ;;
   mips-*-openbsd*)			fmt=elf ;;
+  mips-*-irx*)				fmt=elf endian=little ;;
+  mips*-*-irx*)			fmt=elf endian=little em=mipsirx ;;
 
   mmix-*-*)				fmt=elf ;;
 
