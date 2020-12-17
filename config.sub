@@ -392,6 +392,10 @@ case $1 in
 				basic_machine=arm-unknown
 				os=mingw32ce
 				;;
+			iop)
+				basic_machine=mipsel-scei
+				os=-irx
+				;;
 			monitor)
 				basic_machine=m68k-rom68k
 				os=coff
@@ -1360,7 +1364,7 @@ case $os in
 	     | storm-chaos* | tops10* | tenex* | tops20* | its* \
 	     | os2* | vos* | palmos* | uclinux* | nucleus* \
 	     | morphos* | superux* | rtmk* | windiss* \
-	     | powermax* | dnix* | nx6 | nx7 | sei* | dragonfly* \
+	     | powermax* | dnix* | nx6 | nx7 | irx* | sei* | dragonfly* \
 	     | skyos* | haiku* | rdos* | toppers* | drops* | es* \
 	     | onefs* | tirtos* | phoenix* | fuchsia* | redox* | bme* \
 	     | midnightbsd* | amdhsa* | unleashed* | emscripten*)
