@@ -387,6 +387,7 @@ changequote([,])dnl
       mips-*-irix6*)			fmt=elf em=irix ;;
       mips-*-irix5*)			fmt=elf em=irix ;;
       mips-*-irix*)			fmt=ecoff em=irix ;;
+      mips-*-irx*)			fmt=elf endian=little ;;
       mips-*-lnews*)			fmt=ecoff em=lnews ;;
       mips-*-riscos*)			fmt=ecoff ;;
       mips*-*-linux*)			fmt=elf em=tmips ;;
@@ -395,6 +396,7 @@ changequote([,])dnl
       mips-*-elf* | mips-*-rtems*)	fmt=elf ;;
       mips-*-netbsd*)			fmt=elf ;;
       mips-*-openbsd*)			fmt=elf ;;
+      mips-*-irx*)			fmt=elf endian=little em=mipsirx ;;
 
       mmix-*-*)				fmt=elf ;;
       mn10200-*-*)			fmt=elf ;;

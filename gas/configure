@@ -4426,6 +4426,7 @@ echo "$as_me: error: Unknown vendor for mips-bsd configuration." >&2;}
       mips-*-irix6*)			fmt=elf em=irix ;;
       mips-*-irix5*)			fmt=elf em=irix ;;
       mips-*-irix*)			fmt=ecoff em=irix ;;
+      mips-*-irx*)			fmt=elf endian=little ;;
       mips-*-lnews*)			fmt=ecoff em=lnews ;;
       mips-*-riscos*)			fmt=ecoff ;;
       mips*-*-linux*)			fmt=elf em=tmips ;;
@@ -4434,6 +4435,7 @@ echo "$as_me: error: Unknown vendor for mips-bsd configuration." >&2;}
       mips-*-elf* | mips-*-rtems*)	fmt=elf ;;
       mips-*-netbsd*)			fmt=elf ;;
       mips-*-openbsd*)			fmt=elf ;;
+      mips*-*-irx*)			fmt=elf endian=little em=mipsirx ;;
 
       mmix-*-*)				fmt=elf ;;
       mn10200-*-*)			fmt=elf ;;

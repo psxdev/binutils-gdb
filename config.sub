@@ -649,6 +649,10 @@ case $basic_machine in
 		basic_machine=m68k-atari
 		os=-mint
 		;;
+	iop)
+		basic_machine=mipsel-scei
+		os=-irx
+		;;
 	mips3*-*)
 		basic_machine=`echo $basic_machine | sed -e 's/mips3/mips64/'`
 		;;
@@ -1163,7 +1167,7 @@ case $os in
 	      | -storm-chaos* | -tops10* | -tenex* | -tops20* | -its* \
 	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
 	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
-	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly*)
+	      | -powermax* | -dnix* | -nx6 | -nx7 | -irx* | -sei* | -dragonfly*)
 	# Remember, each alternative MUST END IN *, to match a version number.
 		;;
 	-qnx*)
