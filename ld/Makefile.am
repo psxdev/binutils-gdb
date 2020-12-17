@@ -266,6 +266,7 @@ ALL_EMULATIONS = \
 	emipsbsd.o \
 	emipsidt.o \
 	emipsidtl.o \
+	emipsirx.o \
 	emipslit.o \
 	emipslnews.o \
 	emipspe.o \
@@ -1144,6 +1145,9 @@ emipsidtl.c: $(srcdir)/emulparams/mipsidtl.sh \
   $(srcdir)/emultempl/mipsecoff.em $(srcdir)/emultempl/generic.em \
   $(srcdir)/scripttempl/mips.sc ${GEN_DEPENDS}
 	${GENSCRIPTS} mipsidtl "$(tdir_mipsidtl)"
+emipsirx.c:  $(srcdir)/emulparams/mipsirx.sh \
+  $(srcdir)/emultempl/irx.em $(srcdir)/scripttempl/irx.sc ${GEN_DEPENDS}
+	${GENSCRIPTS} mipsirx "$(tdir_mipsirx)"
 emipslit.c:  $(srcdir)/emulparams/mipslit.sh \
   $(srcdir)/emultempl/generic.em $(srcdir)/scripttempl/mips.sc ${GEN_DEPENDS}
 	${GENSCRIPTS} mipslit "$(tdir_mipslit)"
