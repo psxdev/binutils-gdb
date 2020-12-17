@@ -3608,7 +3608,7 @@ load_register (counter, reg, ep, dbl)
   /* The value is larger than 32 bits.  */
 
   if (HAVE_32BIT_GPRS)
-    {
+        {
       as_bad (_("Number (0x%lx) larger than 32 bits"),
 	      (unsigned long) ep->X_add_number);
       macro_build ((char *) NULL, counter, ep, "addiu", "t,r,j", reg, 0,
@@ -10898,8 +10898,9 @@ md_parse_option (c, arg)
 	mips_debug = atoi (arg);
       /* When the MIPS assembler sees -g or -g2, it does not do
          optimizations which limit full symbolic debugging.  We take
-         that to be equivalent to -O0.  */
-      if (mips_debug == 2)
+         that to be equivalent to -O0. Careful that we do not increase
+         the opts from 0 to 1 though! */
+      if ((mips_debug == 2) && (mips_optimize > 1))
 	mips_optimize = 1;
       break;
 
@@ -11333,6 +11334,10 @@ mips_after_parse_args ()
 	mips_flag_mdebug = 1;
       else
 #endif /* OBJ_MAYBE_ECOFF */
+      /* We default to .mdebug (ECOFF-style debugging) for R5900 and IRX.  */
+      if (strcmp (TARGET_OS, "irx") == 0)
+        mips_flag_mdebug = 1;
+      else
 	mips_flag_mdebug = 0;
     }
 }
