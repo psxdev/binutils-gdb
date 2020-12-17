@@ -2260,7 +2260,7 @@ _bfd_elf_make_section_from_phdr (bfd *abfd,
       newsect->filepos = hdr->p_offset;
       newsect->flags |= SEC_HAS_CONTENTS;
       newsect->alignment_power = bfd_log2 (hdr->p_align);
-      if (hdr->p_type == PT_LOAD)
+      if (hdr->p_type == PT_LOAD || hdr->p_type == PT_MIPS_IRXHDR)
 	{
 	  newsect->flags |= SEC_ALLOC;
 	  newsect->flags |= SEC_LOAD;
@@ -2298,7 +2298,7 @@ _bfd_elf_make_section_from_phdr (bfd *abfd,
       if (align == 0 || align > hdr->p_align)
 	align = hdr->p_align;
       newsect->alignment_power = bfd_log2 (align);
-      if (hdr->p_type == PT_LOAD)
+      if (hdr->p_type == PT_LOAD || hdr->p_type == PT_MIPS_IRXHDR)
 	{
 	  /* Hack for gdb.  Segments that have not been modified do
 	     not have their contents written to a core file, on the
@@ -4179,7 +4179,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
 	  p->p_memsz = bed->s->sizeof_ehdr;
 	  if (m->count > 0)
 	    {
-	      BFD_ASSERT (p->p_type == PT_LOAD);
+	      BFD_ASSERT (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR);
 
 	      if (p->p_vaddr < (bfd_vma) off)
 		{
@@ -4218,7 +4218,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
 	  p->p_memsz += alloc * bed->s->sizeof_phdr;
 	}
 
-      if (p->p_type == PT_LOAD
+      if (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR
 	  || (p->p_type == PT_NOTE && bfd_get_format (abfd) == bfd_core))
 	{
 	  if (!m->includes_filehdr && !m->includes_phdrs)
@@ -4250,6 +4250,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
 	  align = (bfd_size_type) 1 << bfd_get_section_alignment (abfd, sec);
 
 	  if (p->p_type == PT_LOAD
+        || p->p_type == PT_MIPS_IRXHDR
 	      || p->p_type == PT_TLS)
 	    {
 	      bfd_signed_vma adjust = sec->lma - (p->p_paddr + p->p_memsz);
@@ -4299,7 +4300,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
 	    }
 	  else
 	    {
-	      if (p->p_type == PT_LOAD)
+	      if (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 		{
 		  this_hdr->sh_offset = sec->filepos = off;
 		  if (this_hdr->sh_type != SHT_NOBITS)
