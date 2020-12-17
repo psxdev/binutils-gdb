@@ -359,6 +359,8 @@ END_RELOC_NUMBERS (R_MIPS_maxext)
 /* Runtime procedure descriptor table exception information (ucode) ??? */
 #define SHT_MIPS_PDR_EXCEPTION	0x70000029
 
+/* .iopmod section for IRXs */
+#define SHT_MIPS_IOPMOD		0x70000080
 
 /* A section of type SHT_MIPS_LIBLIST contains an array of the
    following structure.  The sh_link field is the section index of the
@@ -524,6 +526,10 @@ extern void bfd_mips_elf32_swap_reginfo_out
 
 /* .MIPS.options section.  */
 #define PT_MIPS_OPTIONS		0x70000002
+
+/* IRX header */
+/* #define PT_MIPS_IRXHDR		0x70000080 let's define it in common.h...*/
+
 
 /* Processor specific dynamic array tags.  */
 
