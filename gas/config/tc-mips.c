@@ -3976,7 +3976,7 @@ load_register (int reg, expressionS *ep, int dbl)
   /* The value is larger than 32 bits.  */
 
   if (!dbl || HAVE_32BIT_GPRS)
-    {
+        {
       char value[32];
 
       sprintf_vma (value, ep->X_add_number);
@@ -11056,6 +11056,8 @@ md_parse_option (int c, char *arg)
 	mips_debug = 2;
       else
 	mips_debug = atoi (arg);
+      if ((mips_debug == 2) && (mips_optimize > 1))
+        mips_optimize = 1;
       break;
 
     case OPTION_MIPS1:
@@ -11607,6 +11609,10 @@ mips_after_parse_args (void)
 	mips_flag_mdebug = 1;
       else
 #endif /* OBJ_MAYBE_ECOFF */
+      /* We default to .mdebug (ECOFF-style debugging) for R5900 and IRX.  */
+      if (strcmp (TARGET_OS, "irx") == 0)
+        mips_flag_mdebug = 1;
+      else
 	mips_flag_mdebug = 0;
     }
 }
