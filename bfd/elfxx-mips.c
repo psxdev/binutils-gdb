@@ -4379,6 +4379,10 @@ _bfd_mips_elf_section_from_shdr (abfd, hdr, name)
      probably get away with this.  */
   switch (hdr->sh_type)
     {
+    case SHT_MIPS_IOPMOD:
+      if (strcmp (name, ".iopmod") != 0)
+	return FALSE;
+      break;
     case SHT_MIPS_LIBLIST:
       if (strcmp (name, ".liblist") != 0)
 	return FALSE;
@@ -4540,7 +4544,25 @@ _bfd_mips_elf_fake_sections (abfd, hdr, sec)
 
   name = bfd_get_section_name (abfd, sec);
 
-  if (strcmp (name, ".liblist") == 0)
+  if (strcmp (name, ".iopmod") == 0)
+    {
+      /* Verify that this bfd is going to be an IRX, and not an object 
+         file or a rogue elf with an .iopmod section by looking for 
+         the PT_MIPS_IRXHDR program header.  */
+      struct elf_segment_map *m;
+
+      for (m = elf_tdata (abfd)->segment_map; m != NULL; m = m->next)
+        if (m->p_type == PT_MIPS_IRXHDR)
+          {
+            /* Mark the file as an IRX.  */
+            elf_elfheader (abfd)->e_type = ET_IRX;
+            /* Setup the section type and flags.  */
+            hdr->sh_type = SHT_MIPS_IOPMOD;
+            hdr->sh_addr = 0;
+            hdr->sh_flags &= ~(SHF_ALLOC | SHF_WRITE | SHF_EXECINSTR);
+          }
+    }
+  else if (strcmp (name, ".liblist") == 0)
     {
       hdr->sh_type = SHT_MIPS_LIBLIST;
       hdr->sh_info = sec->_raw_size / sizeof (Elf32_Lib);
@@ -9276,7 +9298,7 @@ _bfd_mips_elf_merge_private_bfd_data (ibfd, obfd)
     {
       (*_bfd_error_handler)
 	(_("%s: linking 32-bit code with 64-bit code"),
-	 bfd_archive_filename (ibfd));
+	 bfd_archive_filename (ibfd), old_flags, new_flags);
       ok = FALSE;
     }
   else if (!mips_mach_extends_p (bfd_get_mach (ibfd), bfd_get_mach (obfd)))

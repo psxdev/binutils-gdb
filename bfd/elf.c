@@ -2214,7 +2214,7 @@ _bfd_elf_make_section_from_phdr (abfd, hdr, index, typename)
   newsect->_raw_size = hdr->p_filesz;
   newsect->filepos = hdr->p_offset;
   newsect->flags |= SEC_HAS_CONTENTS;
-  if (hdr->p_type == PT_LOAD)
+  if (hdr->p_type == PT_LOAD || hdr->p_type == PT_MIPS_IRXHDR)
     {
       newsect->flags |= SEC_ALLOC;
       newsect->flags |= SEC_LOAD;
@@ -2244,7 +2244,7 @@ _bfd_elf_make_section_from_phdr (abfd, hdr, index, typename)
       newsect->vma = hdr->p_vaddr + hdr->p_filesz;
       newsect->lma = hdr->p_paddr + hdr->p_filesz;
       newsect->_raw_size = hdr->p_memsz - hdr->p_filesz;
-      if (hdr->p_type == PT_LOAD)
+      if (hdr->p_type == PT_LOAD || hdr->p_type == PT_MIPS_IRXHDR)
 	{
 	  newsect->flags |= SEC_ALLOC;
 	  if (hdr->p_flags & PF_X)
@@ -3744,7 +3744,7 @@ assign_file_positions_for_segments (abfd)
       else
 	p->p_paddr = m->sections[0]->lma;
 
-      if (p->p_type == PT_LOAD
+      if ((p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 	  && (abfd->flags & D_PAGED) != 0)
 	p->p_align = bed->maxpagesize;
       else if (m->count == 0)
@@ -3765,7 +3765,7 @@ assign_file_positions_for_segments (abfd)
 	  p->p_memsz = bed->s->sizeof_ehdr;
 	  if (m->count > 0)
 	    {
-	      BFD_ASSERT (p->p_type == PT_LOAD);
+	      BFD_ASSERT (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR);
 
 	      if (p->p_vaddr < (bfd_vma) off)
 		{
@@ -3780,7 +3780,7 @@ assign_file_positions_for_segments (abfd)
 	      if (! m->p_paddr_valid)
 		p->p_paddr -= off;
 	    }
-	  if (p->p_type == PT_LOAD)
+	  if (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 	    {
 	      filehdr_vaddr = p->p_vaddr;
 	      filehdr_paddr = p->p_paddr;
@@ -3794,7 +3794,7 @@ assign_file_positions_for_segments (abfd)
 
 	  if (m->includes_filehdr)
 	    {
-	      if (p->p_type == PT_LOAD)
+	      if (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 		{
 		  phdrs_vaddr = p->p_vaddr + bed->s->sizeof_ehdr;
 		  phdrs_paddr = p->p_paddr + bed->s->sizeof_ehdr;
@@ -3812,7 +3812,7 @@ assign_file_positions_for_segments (abfd)
 		    p->p_paddr -= off - p->p_offset;
 		}
 
-	      if (p->p_type == PT_LOAD)
+	      if (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 		{
 		  phdrs_vaddr = p->p_vaddr;
 		  phdrs_paddr = p->p_paddr;
@@ -3825,7 +3825,7 @@ assign_file_positions_for_segments (abfd)
 	  p->p_memsz += alloc * bed->s->sizeof_phdr;
 	}
 
-      if (p->p_type == PT_LOAD
+      if (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR
 	  || (p->p_type == PT_NOTE && bfd_get_format (abfd) == bfd_core))
 	{
 	  if (! m->includes_filehdr && ! m->includes_phdrs)
@@ -3860,7 +3860,7 @@ assign_file_positions_for_segments (abfd)
 	      bfd_vma adjust = sec->lma - (p->p_paddr + p->p_memsz);
 
 	      p->p_memsz += adjust;
-	      if (p->p_type == PT_LOAD
+	      if (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR
 		  || (p->p_type == PT_NOTE
 		      && bfd_get_format (abfd) == bfd_core))
 		{
@@ -3872,7 +3872,7 @@ assign_file_positions_for_segments (abfd)
 		p->p_filesz += adjust;
 	    }
 
-	  if (p->p_type == PT_LOAD)
+	  if (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 	    {
 	      bfd_signed_vma adjust;
 
@@ -3977,7 +3977,8 @@ Error: First section in segment (%s) starts at 0x%x whereas the segment starts a
 		}
 
 	      if (align > p->p_align
-		  && (p->p_type != PT_LOAD || (abfd->flags & D_PAGED) == 0))
+		  && ((p->p_type != PT_LOAD && p->p_type != PT_MIPS_IRXHDR)
+                  || (abfd->flags & D_PAGED) == 0))
 		p->p_align = align;
 	    }
 
@@ -3998,7 +3999,7 @@ Error: First section in segment (%s) starts at 0x%x whereas the segment starts a
        m != NULL;
        m = m->next, p++)
     {
-      if (p->p_type != PT_LOAD && m->count > 0)
+      if (p->p_type != PT_LOAD && p->p_type != PT_MIPS_IRXHDR && m->count > 0)
 	{
 	  BFD_ASSERT (! m->includes_filehdr && ! m->includes_phdrs);
 	  p->p_offset = m->sections[0]->filepos;
