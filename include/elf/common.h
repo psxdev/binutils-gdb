@@ -92,6 +92,7 @@
 #define ET_LOOS		0xFE00	/* Operating system-specific */
 #define ET_HIOS		0xFEFF	/* Operating system-specific */
 #define ET_LOPROC	0xFF00	/* Processor-specific */
+#define ET_IRX		0xFF80  /* IRX file for PS2's IOP */
 #define ET_HIPROC	0xFFFF	/* Processor-specific */
 
 /* Values for e_machine, which identifies the architecture.  These numbers
@@ -286,6 +287,7 @@
 #define PT_HIOS		0x6fffffff	/* OS-specific */
 #define PT_LOPROC	0x70000000	/* Processor-specific */
 #define PT_HIPROC	0x7FFFFFFF	/* Processor-specific */
+#define PT_MIPS_IRXHDR	0x70000080	/* Sony's ugly IRX-ELF extension */
 
 #define PT_GNU_EH_FRAME	(PT_LOOS + 0x474e550)
 
