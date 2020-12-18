@@ -108,10 +108,15 @@ SECTIONS
   ${RELOCATING+_data_size = _edata - _fdata ;}
   ${RELOCATING+_bss_size = _end - _fbss ;}
 
-  /* This is the stuff that we don't want to be put in an IRX.  */
+  /* These are the stuff that we don't want to be put in an IRX.  */
   /DISCARD/ : {
+	* ( .MIPS.abiflags )
+	* ( .gnu.attributes )
+	* ( .comment )
 	* ( .reginfo )
 	* ( .mdebug.* )
+	/* This must go because it confuses the IOP kernel (treated as a reloc section). */
+	* ( .pdr )
 	/* Until I can figure out if there's a better way to rid ourselves of .rel.dyn
 	   this will have to do.  - MRB  */
 	* ( .rel.dyn )
