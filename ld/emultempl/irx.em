@@ -65,7 +65,7 @@ irx_before_parse (void)
   gld${EMULATION_NAME}_before_parse();
 
   /* Only setup IRX headers for executable files.  */
-  if (!link_info.relocatable)
+  if (!bfd_link_relocatable (&link_info))
   {
     building_irx = TRUE;
     /* IRX files are dynamic.  They need their relocations.  */
