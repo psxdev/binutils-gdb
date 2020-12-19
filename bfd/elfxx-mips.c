@@ -7554,7 +7554,7 @@ _bfd_mips_elf_fake_sections (bfd *abfd, Elf_Internal_Shdr *hdr, asection *sec)
          the PT_MIPS_IRXHDR program header.  */
       struct elf_segment_map *m;
 
-      for (m = elf_tdata (abfd)->segment_map; m != NULL; m = m->next)
+      for (m = elf_seg_map(abfd); m != NULL; m = m->next)
         if (m->p_type == PT_MIPS_IRXHDR)
           {
             /* Mark the file as an IRX.  */
