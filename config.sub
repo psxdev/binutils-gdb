@@ -394,7 +394,7 @@ case $1 in
 				;;
 			iop)
 				basic_machine=mipsel-scei
-				os=-irx
+				os=irx
 				;;
 			monitor)
 				basic_machine=m68k-rom68k
