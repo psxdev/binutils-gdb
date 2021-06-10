@@ -341,6 +341,7 @@ ALL_EMULATION_SOURCES = \
 	em68kpsos.c \
 	em88kbcs.c \
 	emcorepe.c \
+	emipsirx.c \
 	emn10200.c \
 	emn10300.c \
 	emsp430.c \
@@ -1495,6 +1496,9 @@ em88kbcs.c: $(srcdir)/emulparams/m88kbcs.sh \
 
 emcorepe.c: $(srcdir)/emulparams/mcorepe.sh \
   $(srcdir)/emultempl/pe.em $(srcdir)/scripttempl/pe.sc ${GEN_DEPENDS}
+
+emipsirx.c:  $(srcdir)/emulparams/mipsirx.sh $(ELF_DEPS) \
+  $(srcdir)/emultempl/irx.em $(srcdir)/scripttempl/irx.sc ${GEN_DEPENDS}
 
 emn10200.c: $(srcdir)/emulparams/mn10200.sh \
   $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
